@@ -5,6 +5,8 @@ from rest_framework import filters, generics, status
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework import status
+from rest_framework.permissions import IsAdminUser
 
 from .serializers import UserSerializer
 from projects.permissions import IsProjectAdmin
@@ -34,10 +36,27 @@ class UserCreation(generics.CreateAPIView):
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        user = self.perform_create(serializer)
+        user = self.perform_create(serializer, request)
         headers = self.get_success_headers(serializer.data)
         return Response(UserSerializer(user).data, status=status.HTTP_201_CREATED, headers=headers)
 
-    def perform_create(self, serializer):
-        user = serializer.save(self.request)
+    def perform_create(self, serializer, request):
+        user = serializer.save(request=request)
         return user
+
+class UserDeletion(APIView):
+    permission_classes = (IsAuthenticated, IsAdminUser)
+
+    def delete(self, request, user_id):  # <== Alterado aqui
+        try:
+            user = User.objects.get(id=user_id)
+            user.delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        except User.DoesNotExist:
+            return Response({"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
+
+
+class UserUpdate(generics.RetrieveUpdateAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+    permission_classes = [IsAuthenticated & IsAdminUser]

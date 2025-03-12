@@ -29,6 +29,13 @@
     >
       {{ $t('header.projects') }}
     </v-btn>
+
+    <!--Botão para página de admin de gestão de users-->
+    <v-btn v-if="isAuthenticated" text class="text-capitalize" 
+      @click="$router.push(localePath('/users'))">
+      Users
+    </v-btn>
+
     <v-menu v-if="!isAuthenticated" open-on-hover offset-y>
       <template #activator="{ on }">
         <v-btn text v-on="on">
