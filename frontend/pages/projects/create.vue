@@ -7,6 +7,26 @@
         <project-name-field v-model="editedItem.name" outlined autofocus />
         <project-description-field v-model="editedItem.description" outlined />
         <tag-list v-model="editedItem.tags" outlined />
+
+        <!-- Mostrar apenas se for "Text Classification" -->
+        <template v-if="isTextClassification">
+          <v-checkbox
+            v-model="editedItem.enableDiscrepancyCheck"
+            label="Enable automatic discrepancy check"
+          />
+
+          <v-text-field
+            v-if="editedItem.enableDiscrepancyCheck"
+            v-model="editedItem.discrepancyThreshold"
+            label="Minimum agreement percentage"
+            type="number"
+            min="0"
+            max="100"
+            outlined
+            :rules="[v => (v >= 0 && v <= 100) || 'Percentage must be between 0 and 100']"
+          />
+        </template>
+
         <v-checkbox
           v-if="showExclusiveCategories"
           v-model="editedItem.exclusiveCategories"
@@ -75,7 +95,7 @@ import RandomOrderField from '~/components/project/RandomOrderField.vue'
 import SharingModeField from '~/components/project/SharingModeField.vue'
 import TagList from '~/components/project/TagList.vue'
 import {
-  DocumentClassification,
+  DocumentClassification, // Este representa "Text Classification"
   ImageClassification,
   SequenceLabeling,
   canDefineLabel
@@ -94,7 +114,9 @@ const initializeProject = () => {
     useRelation: false,
     tags: [] as string[],
     guideline: '',
-    allowMemberToCreateLabelType: false
+    allowMemberToCreateLabelType: false,
+    enableDiscrepancyCheck: false, // Novo campo para ativar a discrepância automática
+    discrepancyThreshold: 80 // Novo campo para a percentagem de concordância mínima
   }
 }
 
@@ -128,6 +150,10 @@ export default Vue.extend({
     },
     _canDefineLabel(): boolean {
       return canDefineLabel(this.editedItem.projectType as any)
+    },
+    // ✅ Computed para verificar se é um projeto "Text Classification"
+    isTextClassification(): boolean {
+      return this.editedItem.projectType === DocumentClassification
     }
   },
 
