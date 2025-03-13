@@ -7,7 +7,7 @@
 
     <!-- Tabela de Users -->
     <v-data-table
-      :value="users"
+      :model-value="[]"
       :headers="headers"
       :items="users"
       :options.sync="options"
@@ -29,11 +29,12 @@
     <template #top>
       <v-text-field
         v-model="search"
-        :prepend-inner-icon="mdiMagnify"
+        :prepend-inner-icon="mdi-Magnify"
         :label="$t('generic.search')"
         single-line
         hide-details
         filled
+        @input="handleSearch"
       />
     </template>
 
