@@ -126,6 +126,8 @@
 </template>
 
 <script>
+import { debounce } from "lodash";
+
 export default {
   layout: "projects",
   middleware: ["check-auth", "auth"],
@@ -140,6 +142,7 @@ export default {
     },
       dialog: false,
       users: [],
+      search: "",
       headers: [
         { text: "Username", value: "username" },
         { text: "Email Address", value: "email" },
@@ -189,6 +192,9 @@ export default {
         console.error("Error getting users:", error);
       }
     },
+    handleSearch: debounce(function () {
+      this.fetchUsers(this.search);
+    }, 300),
     async saveUser() {
       if (this.password !== this.passwordConfirm) {
         alert("The passowrds are different!");
