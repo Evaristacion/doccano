@@ -7,6 +7,28 @@
         <project-name-field v-model="editedItem.name" outlined autofocus />
         <project-description-field v-model="editedItem.description" outlined />
         <tag-list v-model="editedItem.tags" outlined />
+
+        <!-- Mostrar apenas se for "Text Classification" -->
+        <template>
+          <v-checkbox v-if="isTextClassification"
+            v-model="editedItem.discrepancy_active"
+            label="Enable automatic discrepancy check"
+          />
+        </template>
+
+        <template>
+          <v-text-field
+              v-if="editedItem.discrepancy_active"
+              v-model="editedItem.discrepancy_percentage"
+              label="Minimum agreement percentage"
+              type="number"
+              min="0"
+              max="100"
+              outlined
+              :rules="[v => (v >= 0 && v <= 100) || 'Percentage must be between 0 and 100']"
+            />
+        </template>
+
         <v-checkbox
           v-if="showExclusiveCategories"
           v-model="editedItem.exclusiveCategories"
@@ -94,7 +116,9 @@ const initializeProject = () => {
     useRelation: false,
     tags: [] as string[],
     guideline: '',
-    allowMemberToCreateLabelType: false
+    allowMemberToCreateLabelType: false,
+    discrepancy_active: false,
+    discrepancy_percentage: 0
   }
 }
 
@@ -128,6 +152,9 @@ export default Vue.extend({
     },
     _canDefineLabel(): boolean {
       return canDefineLabel(this.editedItem.projectType as any)
+    },
+    isTextClassification(): boolean {
+      return this.editedItem.projectType === DocumentClassification
     }
   },
 

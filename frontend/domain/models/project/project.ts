@@ -55,6 +55,8 @@ export class Project {
   name: string
   description: string
   projectType: ProjectType
+  discrepancy_active: boolean
+  discrepancy_percentage: number
   constructor(
     readonly id: number,
     readonly _name: string,
@@ -69,6 +71,8 @@ export class Project {
     readonly useRelation: boolean,
     readonly tags: TagItem[],
     readonly allowMemberToCreateLabelType: boolean = false,
+    readonly _discrepancy_active: boolean = false,
+    readonly _discrepancy_percentage: number,
     readonly users: number[] = [],
     readonly createdAt: string = '',
     readonly updatedAt: string = '',
@@ -90,6 +94,8 @@ export class Project {
     this.name = _name.trim()
     this.description = _description.trim()
     this.projectType = _projectType as ProjectType
+    this.discrepancy_active = _discrepancy_active
+    this.discrepancy_percentage = _discrepancy_percentage
   }
 
   static create(
@@ -105,7 +111,10 @@ export class Project {
     enableGraphemeMode: boolean,
     useRelation: boolean,
     tags: TagItem[],
-    allowMemberToCreateLabelType: boolean
+    allowMemberToCreateLabelType: boolean,
+    discrepancy_active: boolean,
+    discrepancy_percentage: number
+    
   ) {
     return new Project(
       id,
@@ -120,7 +129,9 @@ export class Project {
       enableGraphemeMode,
       useRelation,
       tags,
-      allowMemberToCreateLabelType
+      allowMemberToCreateLabelType,
+      discrepancy_active,
+      discrepancy_percentage
     )
   }
 
