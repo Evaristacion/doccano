@@ -16,6 +16,8 @@ type ProjectFields = {
   enableGraphemeMode: boolean
   useRelation: boolean
   allowMemberToCreateLabelType: boolean
+  discrepancy_active: boolean
+  discrepancy_percentage: number
 }
 
 export interface SearchQueryData {
@@ -54,8 +56,27 @@ export class ProjectApplicationService {
     useRelation,
     tags,
     guideline = '',
-    allowMemberToCreateLabelType = false
+    allowMemberToCreateLabelType = false,
+    discrepancy_active = false,
+    discrepancy_percentage
   }: ProjectFields): Promise<Project> {
+    console.log('Creating project with the following data:', {
+      name,
+      description,
+      projectType,
+      enableRandomOrder,
+      enableSharingMode,
+      exclusiveCategories,
+      allowOverlappingSpans,
+      enableGraphemeMode,
+      useRelation,
+      tags,
+      guideline,
+      allowMemberToCreateLabelType,
+      discrepancy_active,
+      discrepancy_percentage
+    })
+    
     const project = Project.create(
       0,
       name,
@@ -69,14 +90,17 @@ export class ProjectApplicationService {
       enableGraphemeMode,
       useRelation,
       tags.map((tag) => TagItem.create(tag)),
-      allowMemberToCreateLabelType
+      allowMemberToCreateLabelType,
+      discrepancy_active,
+      discrepancy_percentage
     )
     try {
       return await this.repository.create(project)
     } catch (e: any) {
+      console.error('Error during project creation:', e.response.data.detail)
       throw new Error(e.response.data.detail)
     }
-  }
+  }  
 
   public async update(
     projectId: number,
@@ -91,7 +115,9 @@ export class ProjectApplicationService {
       enableGraphemeMode,
       useRelation,
       guideline = '',
-      allowMemberToCreateLabelType
+      allowMemberToCreateLabelType,
+      discrepancy_active,
+      discrepancy_percentage
     }: Omit<ProjectFields, 'tags'>
   ): Promise<void> {
     const project = Project.create(
@@ -107,7 +133,9 @@ export class ProjectApplicationService {
       enableGraphemeMode,
       useRelation,
       [],
-      allowMemberToCreateLabelType
+      allowMemberToCreateLabelType,
+      discrepancy_active,
+      discrepancy_percentage
     )
 
     try {

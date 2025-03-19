@@ -37,7 +37,8 @@ import {
   mdiDatabase,
   mdiHome,
   mdiLabel,
-  mdiPlayCircleOutline
+  mdiPlayCircleOutline,
+  mdiAlertCircleOutline // Novo ícone
 } from '@mdi/js'
 import { getLinkToAnnotationPage } from '~/presenter/linkToAnnotationPage'
 
@@ -121,6 +122,13 @@ export default {
           icon: mdiCog,
           text: this.$t('settings.title'),
           link: 'settings',
+          isVisible: this.isProjectAdmin
+        },
+        // NBotão para abrir a página de discrepância
+        {
+          icon: mdiAlertCircleOutline,
+          text: 'Discrepâncias',
+          link: 'discrepancies',
           isVisible: this.isProjectAdmin
         }
       ]
