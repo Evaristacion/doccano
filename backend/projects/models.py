@@ -41,6 +41,9 @@ class Project(PolymorphicModel):
     single_class_classification = models.BooleanField(default=False)
     allow_member_to_create_label_type = models.BooleanField(default=False)
 
+    discrepancy_active = models.BooleanField()
+    discrepancy_percentage = models.FloatField(default=0)
+
     def add_admin(self):
         admin_role = Role.objects.get(name=settings.ROLE_PROJECT_ADMIN)
         Member.objects.create(

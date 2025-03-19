@@ -9,22 +9,24 @@
         <tag-list v-model="editedItem.tags" outlined />
 
         <!-- Mostrar apenas se for "Text Classification" -->
-        <template v-if="isTextClassification">
-          <v-checkbox
-            v-model="editedItem.enableDiscrepancyCheck"
+        <template>
+          <v-checkbox v-if="isTextClassification"
+            v-model="editedItem.discrepancy_active"
             label="Enable automatic discrepancy check"
           />
+        </template>
 
+        <template>
           <v-text-field
-            v-if="editedItem.enableDiscrepancyCheck"
-            v-model="editedItem.discrepancyThreshold"
-            label="Minimum agreement percentage"
-            type="number"
-            min="0"
-            max="100"
-            outlined
-            :rules="[v => (v >= 0 && v <= 100) || 'Percentage must be between 0 and 100']"
-          />
+              v-if="editedItem.discrepancy_active"
+              v-model="editedItem.discrepancy_percentage"
+              label="Minimum agreement percentage"
+              type="number"
+              min="0"
+              max="100"
+              outlined
+              :rules="[v => (v >= 0 && v <= 100) || 'Percentage must be between 0 and 100']"
+            />
         </template>
 
         <v-checkbox
@@ -95,7 +97,7 @@ import RandomOrderField from '~/components/project/RandomOrderField.vue'
 import SharingModeField from '~/components/project/SharingModeField.vue'
 import TagList from '~/components/project/TagList.vue'
 import {
-  DocumentClassification, // Este representa "Text Classification"
+  DocumentClassification,
   ImageClassification,
   SequenceLabeling,
   canDefineLabel
@@ -115,8 +117,8 @@ const initializeProject = () => {
     tags: [] as string[],
     guideline: '',
     allowMemberToCreateLabelType: false,
-    enableDiscrepancyCheck: false, // Novo campo para ativar a discrepância automática
-    discrepancyThreshold: 80 // Novo campo para a percentagem de concordância mínima
+    discrepancy_active: false,
+    discrepancy_percentage: 0
   }
 }
 
@@ -151,7 +153,6 @@ export default Vue.extend({
     _canDefineLabel(): boolean {
       return canDefineLabel(this.editedItem.projectType as any)
     },
-    // ✅ Computed para verificar se é um projeto "Text Classification"
     isTextClassification(): boolean {
       return this.editedItem.projectType === DocumentClassification
     }

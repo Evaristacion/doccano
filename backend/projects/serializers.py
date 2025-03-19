@@ -50,6 +50,7 @@ class TagSerializer(serializers.ModelSerializer):
 class ProjectSerializer(serializers.ModelSerializer):
     tags = TagSerializer(many=True, required=False)
     author = serializers.SerializerMethodField()
+    discrepancy_active = serializers.BooleanField()
 
     @classmethod
     def get_author(cls, instance):
@@ -74,6 +75,8 @@ class ProjectSerializer(serializers.ModelSerializer):
             "allow_member_to_create_label_type",
             "is_text_project",
             "tags",
+            "discrepancy_active",
+            "discrepancy_percentage"
         ]
         read_only_fields = (
             "created_at",
@@ -90,9 +93,10 @@ class ProjectSerializer(serializers.ModelSerializer):
         return project
 
     def update(self, instance, validated_data):
-        # Don't update tags. Please use TagAPI.
         validated_data.pop("tags", None)
         return super().update(instance, validated_data)
+
+
 
 
 class TextClassificationProjectSerializer(ProjectSerializer):

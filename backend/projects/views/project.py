@@ -10,6 +10,7 @@ from projects.models import Project
 from projects.permissions import IsProjectAdmin, IsProjectStaffAndReadOnly
 from projects.serializers import ProjectPolymorphicSerializer
 
+from rest_framework.views import APIView
 
 class ProjectList(generics.ListCreateAPIView):
     serializer_class = ProjectPolymorphicSerializer
@@ -41,9 +42,6 @@ class ProjectList(generics.ListCreateAPIView):
             role_mappings__role__name=settings.ROLE_PROJECT_ADMIN,
             pk__in=delete_ids,
         )
-        # Todo: I want to use bulk delete.
-        # But it causes the constraint error.
-        # See https://github.com/django-polymorphic/django-polymorphic/issues/229
         for project in projects:
             project.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
