@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     "projects",
     "metrics",
     "users",
+    "groups",
     "data_import",
     "data_export",
     "auto_labeling",
@@ -237,7 +238,7 @@ CORS_ALLOW_METHODS = ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"]
 
 if DEBUG:
     CORS_ORIGIN_ALLOW_ALL = True
-    CSRF_TRUSTED_ORIGINS = ["http://127.0.0.1:3000", "http://192.168.1.67:3000", "http://172.20.10.2:3000", "http://0.0.0.0:3000", "http://localhost:3000", "http://10.0.2.15:3000", "http://192.168.1.85:3000", "http://localhost/users:3000", "http://10.20.71.144:3000"]
+    CSRF_TRUSTED_ORIGINS = ["http://127.0.0.1:3000","http://10.20.71.213:3000", "http://192.168.1.67:3000", "http://172.20.10.2:3000", "http://0.0.0.0:3000", "http://localhost:3000", "http://10.0.2.15:3000", "http://192.168.1.85:3000", "http://localhost/users:3000", "http://10.20.71.144:3000"]
     CSRF_TRUSTED_ORIGINS += env.list("CSRF_TRUSTED_ORIGINS", [])
 
 # Batch size for importing data

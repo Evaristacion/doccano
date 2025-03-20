@@ -7,12 +7,7 @@
     <v-toolbar-title v-if="!isAuthenticated" class="ml-2 d-none d-sm-flex">
       doccano
     </v-toolbar-title>
-    <v-btn
-      v-if="isAuthenticated && isIndividualProject"
-      text
-      class="d-none d-sm-flex"
-      style="text-transform: none"
-    >
+    <v-btn v-if="isAuthenticated && isIndividualProject" text class="d-none d-sm-flex" style="text-transform: none">
       <v-icon small class="mr-1">
         {{ mdiHexagonMultiple }}
       </v-icon>
@@ -21,19 +16,18 @@
     <div class="flex-grow-1" />
     <the-color-mode-switcher />
     <locale-menu />
-    <v-btn
-      v-if="isAuthenticated"
-      text
-      class="text-capitalize"
-      @click="$router.push(localePath('/projects'))"
-    >
+    <v-btn v-if="isAuthenticated" text class="text-capitalize" @click="$router.push(localePath('/projects'))">
       {{ $t('header.projects') }}
     </v-btn>
 
     <!--Botão para página de admin de gestão de users-->
-    <v-btn v-if="isAuthenticated" text class="text-capitalize" 
-      @click="$router.push(localePath('/users'))">
+    <v-btn v-if="isAuthenticated" text class="text-capitalize" @click="$router.push(localePath('/users'))">
       Users
+    </v-btn>
+
+    <!-- Botão para página de grupos -->
+    <v-btn v-if="isAuthenticated" text class="text-capitalize" @click="$router.push(localePath('/groups'))">
+      Groups
     </v-btn>
 
     <v-menu v-if="!isAuthenticated" open-on-hover offset-y>
@@ -44,11 +38,7 @@
         </v-btn>
       </template>
       <v-list>
-        <v-list-item
-          v-for="(item, index) in items"
-          :key="index"
-          @click="$router.push('/demo/' + item.link)"
-        >
+        <v-list-item v-for="(item, index) in items" :key="index" @click="$router.push('/demo/' + item.link)">
           <v-list-item-title>{{ item.title }}</v-list-item-title>
         </v-list-item>
       </v-list>
