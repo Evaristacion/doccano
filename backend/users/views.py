@@ -47,8 +47,10 @@ class UserCreation(generics.CreateAPIView):
 class UserDeletion(APIView):
     permission_classes = (IsAuthenticated, IsAdminUser)
 
-    def delete(self, request, user_id):  # <== Alterado aqui
+    def delete(self, request, user_id):
         try:
+            if(request.user.id == user_id):
+                return Response({"error": "Super-user can't delete oneself"}, status=status.HTTP_400_BAD_REQUEST)
             user = User.objects.get(id=user_id)
             user.delete()
             return Response(status=status.HTTP_204_NO_CONTENT)
