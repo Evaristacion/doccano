@@ -2,7 +2,8 @@ export const state = () => ({
   username: null,
   id: null,
   isAuthenticated: false,
-  isStaff: false
+  isStaff: false,
+  is_superuser: false,
 })
 
 export const mutations = {
@@ -20,6 +21,9 @@ export const mutations = {
   },
   setIsStaff(state, isStaff) {
     state.isStaff = isStaff
+  },
+  setIsSuperuser(state, is_superuser) {
+    state.is_superuser = is_superuser
   }
 }
 
@@ -35,6 +39,9 @@ export const getters = {
   },
   isStaff(state) {
     return state.isStaff
+  },
+  is_superuser(state) {
+    return state.is_superuser
   }
 }
 
@@ -53,19 +60,23 @@ export const actions = {
   async initAuth({ commit }) {
     try {
       const user = await this.$repositories.user.getProfile()
+      console.log(user)
       commit('setAuthenticated', true)
       commit('setUsername', user.username)
       commit('setUserId', user.id)
       commit('setIsStaff', user.isStaff)
+      commit('setIsSuperuser', user.isSuperuser)
     } catch {
       commit('setAuthenticated', false)
       commit('setIsStaff', false)
+      commit('setIsSuperuser', false)
     }
   },
   async logout({ commit }) {
     await this.$repositories.auth.logout()
     commit('setAuthenticated', false)
     commit('setIsStaff', false)
+    commit('setIsSuperuser', false)
     commit('clearUsername')
   }
 }
