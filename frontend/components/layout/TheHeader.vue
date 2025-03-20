@@ -31,7 +31,7 @@
     </v-btn>
 
     <!--Botão para página de admin de gestão de users-->
-    <v-btn v-if="isAuthenticated" text class="text-capitalize" 
+    <v-btn v-if="isAuthenticated && is_superuser" text class="text-capitalize" 
       @click="$router.push(localePath('/users'))">
       Users
     </v-btn>
@@ -121,10 +121,10 @@ export default {
   },
 
   computed: {
-    ...mapGetters('auth', ['isAuthenticated', 'getUsername']),
+    ...mapGetters('auth', ['isAuthenticated', 'getUsername', 'is_superuser']),
     ...mapGetters('projects', ['currentProject']),
     ...mapGetters('config', ['isRTL']),
-
+    
     isIndividualProject() {
       return this.$route.name && this.$route.name.startsWith('projects-id')
     },

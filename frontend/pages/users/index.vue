@@ -157,6 +157,7 @@ export default {
     };
   },
   mounted() {
+    this.isAdminUserCheck();
     this.fetchUsers();
   },
   methods: {
@@ -184,8 +185,18 @@ export default {
       try {
         const response = await this.$axios.get("/v1/users");
         this.users = response.data;
+        console.log("Users:", this.users);
       } catch (error) {
         console.error("Error getting users:", error);
+      }
+    },
+    async isAdminUserCheck(){
+      const response = await this.$axios.get("/v1/me");
+      const user = response.data;
+      console.log("User:", user);
+      if (!user.is_superuser) {
+        alert("You don't have permission to access this page!");
+        this.$router.push("/");
       }
     },
     async saveUser() {

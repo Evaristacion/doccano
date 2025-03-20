@@ -127,7 +127,7 @@ export default {
         // NBotão para abrir a página de discrepância
         {
           icon: mdiAlertCircleOutline,
-          text: 'Discrepâncias',
+          text: 'Discrepancies',
           link: 'discrepancies',
           isVisible: this.isProjectAdmin
         }
