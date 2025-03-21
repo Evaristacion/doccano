@@ -14,6 +14,8 @@ from .models import (
     Speech2textProject,
     Tag,
     TextClassificationProject,
+    Perspective,
+    PerspectiveMember
 )
 
 
@@ -150,3 +152,18 @@ class ProjectPolymorphicSerializer(PolymorphicSerializer):
         Project: ProjectSerializer,
         **{cls.Meta.model: cls for cls in ProjectSerializer.__subclasses__()},
     }
+
+class PerspectiveSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Perspective
+        fields = ['id', 'name', 'type', 'project']
+        read_only_fields = ['id', 'project']
+
+    def create(self, validated_data):
+        return super().create(validated_data)
+
+
+class PerspectiveMemberSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PerspectiveMember
+        fields = ["id", "member", "perspective", "value"]

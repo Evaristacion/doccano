@@ -222,3 +222,24 @@ class Member(models.Model):
 
     class Meta:
         unique_together = ("user", "project")
+
+class Perspective(models.Model):
+    TYPE_CHOICES = [
+        ("number", "Number"),
+        ("string", "String"),
+    ]
+    project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name="perspectives")
+    name = models.CharField(max_length=255)
+    type = models.CharField(max_length=10, choices=TYPE_CHOICES)
+
+    def __str__(self):
+        return f"{self.name} ({self.get_type_display()})"
+
+
+class PerspectiveMember(models.Model):
+    member = models.ForeignKey(Member, on_delete=models.CASCADE, related_name="perspective_values")
+    perspective = models.ForeignKey(Perspective, on_delete=models.CASCADE, related_name="values")
+    value = models.CharField(max_length=255)
+
+    def __str__(self):
+        return f"{self.member.user.username} → {self.perspective.name}: {self.value}"

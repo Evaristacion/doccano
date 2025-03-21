@@ -16,7 +16,7 @@
 
 <script>
 export default {
-  layout: "projects",
+  layout: "project",
   middleware: ["check-auth", "auth"],
   data() {
     return {

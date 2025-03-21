@@ -2,13 +2,16 @@ from django.conf import settings
 from django.db import transaction
 from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import filters, generics, status, views
+from rest_framework import filters, generics, status, views, viewsets
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from rest_framework.response import Response
 
 from projects.models import Project
 from projects.permissions import IsProjectAdmin, IsProjectStaffAndReadOnly
 from projects.serializers import ProjectPolymorphicSerializer
+
+from projects.models import Perspective
+from projects.serializers import PerspectiveSerializer
 
 from rest_framework.views import APIView
 
@@ -63,3 +66,17 @@ class CloneProject(views.APIView):
         cloned_project = project.clone()
         serializer = ProjectPolymorphicSerializer(cloned_project)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
+    
+    
+class PerspectiveViewSet(viewsets.ModelViewSet):
+    serializer_class = PerspectiveSerializer
+
+    def get_queryset(self):
+        project_id = self.kwargs.get("project_id")
+        return Perspective.objects.filter(project_id=project_id)
+
+    def perform_create(self, serializer):
+        project_id = self.kwargs.get("project_id")
+        project = get_object_or_404(Project, id=project_id)
+        serializer.context['project'] = project
+        serializer.save(project=project)

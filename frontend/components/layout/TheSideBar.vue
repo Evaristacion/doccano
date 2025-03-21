@@ -38,7 +38,8 @@ import {
   mdiHome,
   mdiLabel,
   mdiPlayCircleOutline,
-  mdiAlertCircleOutline // Novo ícone
+  mdiAlertCircleOutline,
+  mdiEyeOutline
 } from '@mdi/js'
 import { getLinkToAnnotationPage } from '~/presenter/linkToAnnotationPage'
 
@@ -87,6 +88,14 @@ export default {
             this.project.canDefineLabel
         },
         {
+          icon: mdiEyeOutline,
+          text: this.$t('Perspectives'),
+          link: 'perspective',
+          isVisible:
+            (this.isProjectAdmin || this.project.allowMemberToCreateLabelType) &&
+            this.project.canDefineLabel
+        },
+        {
           icon: mdiLabel,
           text: 'Relations',
           link: 'links',
@@ -124,7 +133,6 @@ export default {
           link: 'settings',
           isVisible: this.isProjectAdmin
         },
-        // NBotão para abrir a página de discrepância
         {
           icon: mdiAlertCircleOutline,
           text: 'Discrepancies',
