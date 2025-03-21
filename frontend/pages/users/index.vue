@@ -44,11 +44,71 @@
         {{ $t("generic.edit") }}
       </v-btn>  
       <v-btn color="red" text @click="deleteUser(item.id)">
-          {{ $t("generic.delete") }}
+        {{ $t("generic.delete") }}
+      </v-btn>
+      <v-btn color="yellow" text @click="viewUser(item)">
+          {{ $t("generic.view") }}
         </v-btn>
-      </template>
-    </v-data-table>
+    </template>
+  </v-data-table>
 
+  <!-- Pop Up para ver detalhes do utilizador -->
+  <v-dialog v-model="viewDialog" max-width="800px">
+      <v-card>
+        <v-card-title class="headline">User Details</v-card-title>
+        <v-card-text>
+          <v-container>
+            <v-row>
+              <v-col cols="12">
+                <v-text-field label="Username" v-model="selectedUser.username" readonly></v-text-field>
+              </v-col>
+            </v-row>
+            <v-divider></v-divider>
+            <v-row>
+              <v-col cols="12" style="background-color: lightblue; padding: 10px">
+                <strong>Personal Info</strong>
+              </v-col>
+              <v-col cols="6">
+                <v-text-field label="First Name" v-model="selectedUser.first_name" readonly></v-text-field>
+              </v-col>
+              <v-col cols="6">
+                <v-text-field label="Last Name" v-model="selectedUser.last_name" readonly></v-text-field>
+              </v-col>
+              <v-col cols="12">
+                <v-text-field label="Email" v-model="selectedUser.email" readonly></v-text-field>
+              </v-col>
+            </v-row>
+            <v-divider></v-divider>
+            <v-row>
+              <v-col cols="12" style="background-color: lightblue; padding: 10px">
+                <strong>Permissions</strong>
+              </v-col>
+              <v-col cols="12">
+                <v-checkbox label="Active" v-model="selectedUser.is_active" readonly></v-checkbox>
+                <v-checkbox label="Staff status" v-model="selectedUser.is_staff" readonly></v-checkbox>
+                <v-checkbox label="Superuser status" v-model="selectedUser.is_superuser" readonly></v-checkbox>
+              </v-col>
+            </v-row>
+            <v-divider></v-divider>
+            <v-row>
+              <v-col cols="12" style="background-color: lightblue; padding: 10px">
+                <strong>Important Dates</strong>
+              </v-col>
+              <v-col cols="6">
+                <v-text-field label="Last login" v-model="selectedUser.last_log" readonly></v-text-field>
+              </v-col>
+              <v-col cols="6">
+                <v-text-field label="Date joined" v-model="selectedUser.date_joined" readonly></v-text-field>
+              </v-col>
+            </v-row>
+          </v-container>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer />
+          <v-btn color="primary" text @click="viewDialog = false">Close</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
 
     <!-- Pop Up para Editar Permissões -->
 <v-dialog v-model="editDialog" max-width="500px">
@@ -133,6 +193,8 @@ export default {
   middleware: ["check-auth", "auth"],
   data() {
     return {
+      viewDialog: false,
+      selectedUser: false,
       editDialog: false,
       editUser: {
       id: null,
@@ -164,6 +226,10 @@ export default {
     this.fetchUsers();
   },
   methods: {
+    async viewUser(user) { //79146
+      this.viewDialog = true;
+      this.selectedUser = user;
+    },
     openEditDialog(user) {
     this.editUser = {
       id: user.id,

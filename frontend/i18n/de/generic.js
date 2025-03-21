@@ -16,5 +16,6 @@ export default {
   export: 'Exportieren',
   description: 'Beschreibung',
   type: 'Typ',
-  loading: 'Laden... bitte warten'
+  loading: 'Laden... bitte warten',
+  view: 'Benutzerdetails'
 }
